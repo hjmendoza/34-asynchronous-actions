@@ -1,53 +1,58 @@
+import superagent from 'superagent';
+
 // Actions
-const ADD = 'Thing/ADD';
-const ADD_ALL = 'Thing/ADD_ALL';
-const FETCH = 'Thing/FETCH';
-
-// Reducer
-export default function reducer(state = [], action) {
-  switch (action.type) {
-  case ADD:
-    return [
-      ...state,
-      ...action.payload,
-    ];
-  case ADD_ALL :
-
-    return [...state, ...action.payload];
-
-  default: return state;
-  }
-}
+const CREATE_THING = 'CREATE_THING';
+const FETCH_THING = 'FETCH_THING';
+const UPDATE_THING = 'UPDATE_THING';
+const DELETE_THING = 'DELETE_THING';
 
 // Action Creators
-export function addThing(thing) {
-  return {
-    type: ADD,
-    payload: thing,
-  };
-}
-
-export function addThings(things) {
-
-  return {
-    type: ADD_ALL,
-    payload: things, 
+export function createThing(thing) {
+  return dispatch => {
+    const API_url = 'https://internets-of-thing-api.herokuapp.com/api/v1/things';
+    superagent.post(API_url, thing)
+      .then(response => {
+        dispatch ({
+          type: CREATE_THING,
+          payload: response.body,
+        });
+      });
   };
 }
 
 export function fetchThings() {
-
   return dispatch => {
-    
-    fetch('https://internets-of-thing-api.herokuapp.com/api/v1/things')
-      .then(function(response) {
-        return response.json(); 
-      })
-      .then(function(things) {
-
-        dispatch(addThings(things));
-
+    superagent.get('https://internets-of-thing-api.herokuapp.com/api/v1/things')
+      .then(response => {
+        dispatch({
+          type: FETCH_THING,
+          payload: response.body,
+        });
       });
+  };
+}
 
+
+export function updateThing(thing) {
+  return dispatch => {
+    superagent.put(`https://internets-of-thing-api.herokuapp.com/api/v1/things/${thing.id}`)
+      .then(response => {
+        return dispatch({
+          type: UPDATE_THING,
+          payload: response.body,
+        });
+      });
+  };
+}
+
+export function deleteThing(thing) {
+  return dispatch => {
+    superagent.delete(`https://internets-of-thing-api.herokuapp.com/api/v1/things/${thing.id}`)
+      .then(response => {
+        return dispatch({
+          type: DELETE_THING,
+          payload: response.body,
+        });
+      });
   };
 }

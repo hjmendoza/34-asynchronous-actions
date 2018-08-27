@@ -1,4 +1,5 @@
 import superagent from 'superagent';
+const API_url = 'https://internets-of-thing-api.herokuapp.com/api/v1/things';
 
 // Actions
 const CREATE_THING = 'CREATE_THING';
@@ -6,10 +7,10 @@ const FETCH_THING = 'FETCH_THING';
 const UPDATE_THING = 'UPDATE_THING';
 const DELETE_THING = 'DELETE_THING';
 
-// Action Creators
+
+// API actions
 export function createThing(thing) {
   return dispatch => {
-    const API_url = 'https://internets-of-thing-api.herokuapp.com/api/v1/things';
     superagent.post(API_url, thing)
       .then(response => {
         dispatch ({
@@ -22,7 +23,7 @@ export function createThing(thing) {
 
 export function fetchThings() {
   return dispatch => {
-    superagent.get('https://internets-of-thing-api.herokuapp.com/api/v1/things')
+    superagent.get(API_url)
       .then(response => {
         dispatch({
           type: FETCH_THING,
@@ -35,7 +36,7 @@ export function fetchThings() {
 
 export function updateThing(thing) {
   return dispatch => {
-    superagent.put(`https://internets-of-thing-api.herokuapp.com/api/v1/things/${thing.id}`)
+    superagent.put(`${API_url}/${thing.id}`)
       .then(response => {
         return dispatch({
           type: UPDATE_THING,
@@ -47,7 +48,7 @@ export function updateThing(thing) {
 
 export function deleteThing(thing) {
   return dispatch => {
-    superagent.delete(`https://internets-of-thing-api.herokuapp.com/api/v1/things/${thing.id}`)
+    superagent.delete(`${API_url}/${thing.id}`)
       .then(response => {
         return dispatch({
           type: DELETE_THING,

@@ -1,21 +1,23 @@
-import React, { Component, Fragment } from 'react';
-import { BrowserRouter, Route, NavLink } from 'react-router-dom';
-import Thunker from 'thunker';
+import React, { Component } from 'react';
+import { BrowserRouter, Route} from 'react-router-dom'
+import { Provider } from 'react-redux';
+
+import Dashboard from './dashboard.js';
+import createStore from '../lib/store';
+
+const store = createStore();
 
 export default class App extends Component {
 
   render() {
     return (
+      <Provider store={store}>
       <BrowserRouter>
-        <Fragment>
-          <nav>
-            <NavLink to="/">Landing</NavLink>
-            <NavLink to="/Dashboard">Dashboard</NavLink>
-          </nav>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/dashboard" component={Dashboard} />
-        </Fragment>
-      </ BrowserRouter>
+      <Fragment>
+        <Route exact path="/" component={Dashboard} />
+      </Fragment>
+    </ BrowserRouter>
+    </Provider>
     );
   }
 
